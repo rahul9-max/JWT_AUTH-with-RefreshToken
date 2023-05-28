@@ -75,37 +75,16 @@ const generateAccessToken=(user)=>{
  return jwt.sign({email:user.email},process.env.JWT_SECRET,{expiresIn:"15min"})
 }
 // generate refresh Token
-const generateRefreshToken = (user) => {
-  const refreshToken = jwt.sign({ email: user.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '24h' });
-  console.log(refreshToken); // Add this line
-  return refreshToken;
-};
-// const generateRefreshToken=(user)=>{
-//   return jwt.sign({email:user.email},process.env.REFRESH_TOKEN_SECRET,{expiresIn:"24hrs"})
-// }
+const generateRefreshToken=(user)=>{
+  return jwt.sign({email:user.email},process.env.REFRESH_TOKEN_SECRET,{expiresIn:"24hrs"})
+}
 
 app.get("/protected",authenticateUser,(req,res)=>{
   const {fullName,email}=req.user
   res.status(200).json({fullName,email,message:"protected route has been accessed"})
 })
+
 // Middleware to authenticate JWT token
-// function authenticateToken(req, res, next) {
-//   const authHeader = req.headers['authorization'];// This line retrieves the value of the 'Authorization' header from the req object and assigns it to the authHeader constant.
-//   const token = authHeader && authHeader.split(' ')[1];
-
-//   if (!token) {
-//     return res.status(401).json({ message: 'Token not found' });
-//   }
-
-//   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-//     if (err) {
-//       return res.status(404).json({ message: 'Invalid token' });
-//     }
-
-//     req.user = user;
-//     next();
-//   });
-// }
 function authenticateUser(req,res,next){
 const authenticate=req.headers['authorization'];// This line retrieves the value of the 'Authorization' header from the req object and assigns it to the authHeader constant.
 const token=authenticate.split(' ')[1];
